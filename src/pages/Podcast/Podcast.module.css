@@ -1,0 +1,12 @@
+.wrapper {
+}
+
+.contentWrapper {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.itemWrapper {
+    margin-top: 40px;
+}

@@ -1,0 +1,23 @@
+.wrapper {
+    margin-right: 48px;
+    width:fit-content;
+}
+
+.image {
+    display: block;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+}
+.nameField {
+    text-align: center;
+    width: 100%;
+    display: block;
+    padding: 8px;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+
