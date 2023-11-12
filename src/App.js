@@ -8,14 +8,36 @@ import SquarePaner from '~/images/SquarePaner.png';
 import { useState } from 'react';
 import axios from 'axios';
 function App() {
+    const [song, setSong] = useState();
+    const [listSong, setListSong] = useState([]);
+    const [showDashboard, setShowDashBoard] = useState(false);
     return (
         <div className="App">
             <Routes>
                 {publicRoutes.map((route, index) => {
-                    return <Route key={index} path={route.path} element={<route.component />} />;
+                    return (
+                        <Route
+                            key={index}
+                            path={route.path}
+                            element={
+                                <route.component
+                                    hooks={{
+                                        song: { song, setSong },
+                                        show: { showDashboard, setShowDashBoard },
+                                        listSong: { listSong, setListSong },
+                                    }}
+                                />
+                            }
+                        />
+                    );
                 })}
             </Routes>
-            {/* <Layer data={{ image: SquarePaner, title: 'Newjeans', subtitle: 'newjeans' }} /> */}
+            {showDashboard && (
+                <Layer
+                    data={{ image: SquarePaner, title: 'Newjeans', subtitle: 'newjeans' }}
+                    hooks={{ song, setSong, listSong }}
+                />
+            )}
         </div>
     );
 }

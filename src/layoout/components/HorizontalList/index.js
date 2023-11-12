@@ -50,6 +50,7 @@ function HorizontalList({ children, title, onClick, ...props }) {
                 clearInterval(intervalInRef);
                 console.log('clear');
             }
+            enableBodyScroll();
         };
     }, []);
 

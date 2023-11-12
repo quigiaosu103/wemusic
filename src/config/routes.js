@@ -5,6 +5,7 @@ const routes = {
     podcast: '/podcast',
     login: '/login',
     signup: '/signup',
+    artists: '/artists',
 };
 
 export default routes;

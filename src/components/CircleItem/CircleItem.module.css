@@ -1,6 +1,6 @@
 .wrapper {
-    margin-right: 48px;
-    width:fit-content;
+    width: fit-content;
+    cursor: pointer;
 }
 
 .image {
@@ -19,5 +19,3 @@
     font-weight: 600;
     line-height: normal;
 }
-
-

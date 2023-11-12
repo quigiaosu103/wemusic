@@ -12,8 +12,8 @@ import Popper from '~/components/Popper';
 const data = [
     {
         icon: whiteUser,
-        text: 'Login',
-        to: '/login',
+        text: 'Profile',
+        to: '',
     },
     {
         icon: Setting,
@@ -22,7 +22,7 @@ const data = [
     {
         icon: whiteUser,
         iconFill: 'invert(70%) sepia(96%) saturate(2456%) hue-rotate(315deg) brightness(103%) contrast(99%)',
-        text: 'Logout',
+        text: 'Log out',
     },
 ];
 
@@ -44,6 +44,7 @@ const btns = [
 function Heading() {
     const [showOption, setShowOption] = useState(false);
     const [activeBtn, setActiveBtn] = useState(-1);
+    const [user, setUser] = useState('LongNguyen');
     function handleHide() {
         setShowOption(false);
     }
@@ -80,29 +81,38 @@ function Heading() {
                     </span>
                 ))}
 
-                <Tippy
-                    visible={true}
-                    interactive={'true'}
-                    onClickOutside={handleHide}
-                    render={(attrs) =>
-                        showOption && (
-                            <div className={clsx(styles.menuWrapper, 'box')} tabIndex="-1" {...attrs}>
-                                <Popper left="true">
-                                    <Menu data={data} largest="true" />
-                                </Popper>
-                            </div>
-                        )
-                    }
-                >
-                    <span>
-                        <Button onMouseEnter={handleShow} largest={'true'}>
-                            Username
-                            <span className={clsx(styles.iconWrapper)}>
-                                <img src={Profile} className={clsx(styles.userIcon)}></img>
-                            </span>
-                        </Button>
-                    </span>
-                </Tippy>
+                {user != '' ? (
+                    <Tippy
+                        visible={true}
+                        interactive={'true'}
+                        onClickOutside={handleHide}
+                        render={(attrs) =>
+                            showOption && (
+                                <div className={clsx(styles.menuWrapper, 'box')} tabIndex="-1" {...attrs}>
+                                    <Popper left="true">
+                                        <Menu data={data} largest="true" />
+                                    </Popper>
+                                </div>
+                            )
+                        }
+                    >
+                        <span>
+                            <Button onMouseEnter={handleShow} largest={'true'}>
+                                {user}
+                                <span className={clsx(styles.iconWrapper)}>
+                                    <img src={Profile} className={clsx(styles.userIcon)}></img>
+                                </span>
+                            </Button>
+                        </span>
+                    </Tippy>
+                ) : (
+                    <Button disablehover to="/login" largest={'true'}>
+                        Login
+                        <span className={clsx(styles.iconWrapper)}>
+                            <img src={Profile} className={clsx(styles.userIcon)}></img>
+                        </span>
+                    </Button>
+                )}
             </div>
         </div>
     );

@@ -23,6 +23,9 @@
     line-height: normal;
     display: block;
     margin-bottom: 8px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .img {
@@ -37,6 +40,7 @@
 .infoWrapper {
     display: flex;
     align-items: center;
+    width: 320px;
 }
 
 .icon {

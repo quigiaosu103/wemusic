@@ -8,7 +8,7 @@ function HeaderOnly({ title, children, ...props }) {
     return (
         <DefaultLayout>
             <div className={clsx(styles.wrapper)}>
-                <Button to="/">
+                <Button disablehover to="/">
                     <span className={clsx(styles.btnWrapper)}>
                         <img src={BackIcon} />
                         <span className={clsx(styles.title)}>{title}</span>

@@ -5,6 +5,7 @@ import Podcast from '~/pages/Podcast';
 import Favorite from '~/pages/Favorite';
 import Login from '~/pages/Authen/Login';
 import Signup from '~/pages/Authen/Signup';
+import { Artists } from '~/pages/Empty/Artists';
 const publicRoutes = [
     { path: config.routes.home, component: Home },
     { path: config.routes.playlist, component: Playlist },
@@ -12,6 +13,7 @@ const publicRoutes = [
     { path: config.routes.favorite, component: Favorite },
     { path: config.routes.login, component: Login },
     { path: config.routes.signup, component: Signup },
+    { path: config.routes.artists, component: Artists },
 ];
 
 export { publicRoutes };

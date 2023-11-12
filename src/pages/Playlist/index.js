@@ -1,10 +1,12 @@
 import clsx from 'clsx';
-import HeaderOnly from '~/layoout/HeaderOnly';
-import styles from './Playlist.module.css';
-import Rectangle2 from '~/images/Rectangle2.png';
+import { useContext } from 'react';
 import Button from '~/components/Button';
-import singlePauseIcon from '~/images/singlePauseIcon.svg';
+import styles from './Playlist.module.css';
 import ItemList from '~/components/ItemList';
+import HeaderOnly from '~/layoout/HeaderOnly';
+import Rectangle2 from '~/images/Rectangle2.png';
+import singlePauseIcon from '~/images/singlePauseIcon.svg';
+import { DataSetContext } from '~/provider/DatasetProvider';
 const songs = [
     { song: 'Song name', artist: 'Artist name' },
     { song: 'Song name', artist: 'Artist name' },
@@ -13,12 +15,13 @@ const songs = [
     { song: 'Song name', artist: 'Artist name' },
 ];
 function Playlist() {
+    const [dataSet, setDataSet] = useContext(DataSetContext);
     return (
         <div>
-            <HeaderOnly title="MCK's Album">
+            <HeaderOnly title={dataSet[0].name}>
                 <div className={clsx(styles.wrapper)}>
                     <div className={clsx(styles.playlistInfo)}>
-                        <img src={Rectangle2} />
+                        <img className={clsx(styles.img)} src={dataSet[0].image} />
                         <div className={clsx(styles.infoWrapper)}>
                             <span className={clsx(styles.title)}>NewJeans 2nd EP ‘Get Up’</span>
                             <span className={clsx(styles.artist)}>Newjeans</span>
