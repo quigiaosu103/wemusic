@@ -9,7 +9,7 @@ function RecItem({ data, ...props }) {
         setDataSet([data]);
     }
     return (
-        <Button onClick={handleData} disablehover to="/playlist">
+        <Button onClick={handleData} disablehover="true" to="/playlist">
             <div {...props} className={clsx(styles.wrapper)}>
                 <img className={clsx(styles.img)} src={data.image} />
                 <div className={clsx(styles.infoWrapper)}>

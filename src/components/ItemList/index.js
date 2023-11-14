@@ -9,7 +9,7 @@ function ItemList({ data, index, option, onClick }) {
             {data.image && <img className={clsx(styles.img)} src={data.image} />}{' '}
             <div className={styles.infoWrapper}>
                 <span className={clsx(styles.songName)}>{data.name}</span>
-                <span className={clsx(styles.artist)}>{data.stream}</span>
+                <span className={clsx(styles.artist)}>{data.artistName}</span>
             </div>
             {option && (
                 <Button>

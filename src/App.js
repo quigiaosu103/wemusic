@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import axios from 'axios';
 import { Route, Routes } from 'react-router-dom';
 import Heading from './layoout/components/Heading';
 import DefaultLayout from './layoout/DefaultLayout';
@@ -5,9 +7,9 @@ import { publicRoutes } from './route';
 import Favorite from './pages/Favorite';
 import Layer from './layoout/components/Layer';
 import SquarePaner from '~/images/SquarePaner.png';
-import { useState } from 'react';
-import axios from 'axios';
+import { consolelog } from './log';
 function App() {
+    consolelog()
     const [song, setSong] = useState();
     const [listSong, setListSong] = useState([]);
     const [showDashboard, setShowDashBoard] = useState(false);
