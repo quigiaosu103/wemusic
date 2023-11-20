@@ -10,7 +10,7 @@ import HorizontalList from '../HorizontalList';
 function NewFeed() {
     return (
         <div className={clsx(styles.wrapper)} style={{ backgroundImage: `url(${BackPaner})` }}>
-            <HorizontalList auto="true" disablebtn={'true'} disablescrolll={'true'} title={'New sReleases'}>
+            <HorizontalList auto="true" disablebtn={'true'} disablescrolll={'true'} title={'New Releases'}>
                 <div className={clsx(styles.body)}>
                     <div>
                         <img src={RecPaner} className={clsx(styles.img)} />

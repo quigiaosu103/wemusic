@@ -1,6 +1,6 @@
 .wrapper {
-    min-height: 1200px;
-    padding: 60px 60px 148px 60px;
+    min-height: 100vh;
+    padding: 0 60px 148px 60px;
 }
 
 .title {

@@ -1,18 +1,20 @@
-import styles from './Layer.module.css';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
-import Button from '~/components/Button';
-import whiteHeart from '~/images/whiteHeart.svg';
+import { useEffect, useState, useRef, useContext } from 'react';
 import Pause from '~/images/Pause.svg';
+import styles from './Layer.module.css';
+import Button from '~/components/Button';
+import { isUserLiked } from '~/api/favorite';
 import NextIcon from '~/images/NextIcon.svg';
-import AddListIcon from '~/images/AddListIcon.svg';
 import PrevIcon from '~/images/PrevIcon.svg';
 import SuffIcon from '~/images/SuffIcon.svg';
 import VolumeIcon from '~/images/VolumeIcon.svg';
+import whiteHeart from '~/images/whiteHeart.svg';
 import YellowHeart from '~/images/YellowHeart.svg';
-import YellowSuffIon from '~/images/YellowSuffIon.svg';
+import AddListIcon from '~/images/AddListIcon.svg';
 import ContinueIcon from '~/images/ContinueIcon.svg';
-import { useRef } from 'react';
+import YellowSuffIon from '~/images/YellowSuffIon.svg';
+import { DataSetContext } from '~/provider/DatasetProvider';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 function Layer({ data, hooks }) {
     const [islogged, setIsLogged] = useState(false);
     const [isSuffed, setIsSuffed] = useState(true);
@@ -21,7 +23,10 @@ function Layer({ data, hooks }) {
     const [volume, setVolume] = useState(40);
     const [progress, setProgress] = useState(0);
     const [songIndex, setSongIndex] = useState(0);
+    const [liked, setLiked] = useState(false);
+    const context = useContext(DataSetContext)
     const ref = useRef(new Audio());
+    const refFunction = useRef()
 
     useEffect(() => {
         if (isPlay) {
@@ -37,48 +42,50 @@ function Layer({ data, hooks }) {
     }, [isPlay]);
 
     useEffect(() => {
-        for (let i = 0; i < hooks.listSong.length; i++) {
-            if (hooks.song.id == hooks.listSong[i].id) {
-                setSongIndex((prev) => {
-                    console.log('update', i);
-                    return i;
-                });
-
-                break;
+        ref.current.pause()
+        console.log("change song: ", ref.current.paused,context.song.song)
+        if(context.song.song) {
+            if(localStorage.getItem('authen')) {
+                isUserLiked(localStorage.getItem('authen'),context.song.song.id)
+                .then(res => setLiked(res))
             }
+            for (let i = 0; i < context.listSong.listSong.length; i++) {
+                if (context.song.song.id == context.listSong.listSong[i].id) {
+                    setSongIndex((prev) => {
+                        return i;
+                    });
+    
+                    break;
+                }
+            }
+            ref.current.src = context.song.song.src;
+            ref.current.play();
+            setIsPlay(true);
         }
-        console.log('curr id: ', songIndex);
-        ref.current.src = hooks.song.src;
-        ref.current.play();
-        setIsPlay(true);
-    }, [hooks.song]);
+        return ()=> {
+            ref.current.pause()
+        }
+    }, [context.song.song]);
 
     useEffect(() => {
-        console.log('rerender');
-        ref.current.addEventListener('ended', () => {
-            if (isSuffed) {
-                nextSong();
-            } else {
-                setIsPlay(false);
+        
+        refFunction.current = () => {
+            if(songIndex == context.listSong.listSong.length-1) {
+                setIsPlay(false)
+            }else {
+                nextSong()
             }
-        });
-
+        };
+        ref.current.addEventListener('ended', refFunction.current)
+        
         ref.current.addEventListener('timeupdate', updateProgress);
         return () => {
-            ref.current.removeEventListener('ended', () => {
-                if (isSuffed) {
-                    nextSong();
-                } else {
-                    setIsPlay(false);
-                }
-            });
+            ref.current.removeEventListener('ended',  refFunction.current);
             ref.current.removeEventListener('timeupdate', updateProgress);
         };
-    }, []);
+    }, [context.listSong.listSong]);
 
-    useEffect(() => {
-        console.log('lssong: ', hooks.listSong);
-    }, [hooks.listSong]);
+
 
     useEffect(() => {
         ref.current.volume = volume / 100;
@@ -102,25 +109,29 @@ function Layer({ data, hooks }) {
 
     function nextSong() {
         setSongIndex((prevSongIndex) => {
-            console.log('next song..', prevSongIndex, (prevSongIndex + 1) % hooks.listSong.length);
-            const newIndex = (prevSongIndex + 1) % hooks.listSong.length;
-            hooks.setSong(hooks.listSong[newIndex]);
+            let newIndex = ((prevSongIndex+1)%  context.listSong.listSong.length)||0
+
+            console.log("index:", newIndex);
+            context.song.setSong(context.listSong.listSong[newIndex]);
             return newIndex;
         });
     }
 
+
     return (
         <div className={clsx(styles.wrapper)}>
-            <div className={clsx(styles.infoWrapper)}>
-                <img className={clsx(styles.img)} src={data.image ? data.image : null}></img>
+            {<div className={clsx(styles.infoWrapper)}>
+                <img className={clsx(styles.img)} src={context.song.song ? context.song.song.image : null}></img>
                 <div className={clsx()}>
-                    <span className={styles.span}>{hooks.song.name}</span>
-                    <span className={styles.span}>Newjeans</span>
+                    <span className={clsx(styles.span, styles.stableWidth)}>{context.song.song? context.song.song.name:""}</span>
+                    <span className={styles.span}>{context.song.song&&context.song.song.artist.reduce((total, curr)=> {
+                    return `${total+curr.name}-`
+                }, '').slice(0, -1) || 'Artist'}</span>
                 </div>
                 <Button disablehover={'true'} onClick={handleClick}>
-                    <img className={clsx(styles.icon)} src={islogged ? YellowHeart : whiteHeart} />
+                    <img className={clsx(styles.icon)} src={liked ? YellowHeart : whiteHeart} />
                 </Button>
-            </div>
+            </div>}
             <div className={clsx(styles.middleLayerWrapper)}>
                 <div className={clsx(styles.progressWrapper)}>
                     <span className={clsx(styles.progressNum)}>{`${

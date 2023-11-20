@@ -1,5 +1,6 @@
 import clsx from 'clsx';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate  } from 'react-router-dom';
 import Button from '~/components/Button';
 import styles from './Playlist.module.css';
 import ItemList from '~/components/ItemList';
@@ -7,39 +8,86 @@ import HeaderOnly from '~/layoout/HeaderOnly';
 import Rectangle2 from '~/images/Rectangle2.png';
 import singlePauseIcon from '~/images/singlePauseIcon.svg';
 import { DataSetContext } from '~/provider/DatasetProvider';
-const songs = [
-    { song: 'Song name', artist: 'Artist name' },
-    { song: 'Song name', artist: 'Artist name' },
-    { song: 'Song name', artist: 'Artist name' },
-    { song: 'Song name', artist: 'Artist name' },
-    { song: 'Song name', artist: 'Artist name' },
-];
+import { getSongsByAlbum } from '~/api/song';
+import { getSongByPlaylist, getUserPlaylist } from '~/api/playlist';
+
+
+
 function Playlist() {
-    const [dataSet, setDataSet] = useContext(DataSetContext);
+    const [playlists, setPlaylists] = useState([])
+    const [songs, setSongs] = useState([])
+    const context = useContext(DataSetContext)
+    const [dataSet, setDataSet] = context.dtSet;
+    const [emptyObjectType, setEmptyObjectType] = context.objData
+
+    const nav = useNavigate()
+
+    useEffect(()=> {
+        if(!localStorage.getItem('authen')) {
+           nav('/login')
+        }
+
+        window.scrollTo(0, 0);
+        getSong()
+
+
+        
+        
+
+    }, [])
+
+    async function handlePlaylistClick(item) {
+        await getSongByPlaylist(item.id)
+        .then(res => {
+            setSongs(res)
+        })
+    }
+
+    useEffect(()=> {
+        handleChooseSong(songs[0])
+    }, [songs])
+
+    
+    const getSong = async function() {
+        await getUserPlaylist(localStorage.getItem('authen'))
+        .then(res => setPlaylists(res))
+    }
+
+    function handleChooseSong(song) {
+        context.song.setSong(song);
+        context.listSong.setListSong(songs);
+        context.showDashboard.setShowDashBoard(true);
+    }
     return (
         <div>
-            <HeaderOnly title={dataSet[0].name}>
-                <div className={clsx(styles.wrapper)}>
-                    <div className={clsx(styles.playlistInfo)}>
-                        <img className={clsx(styles.img)} src={dataSet[0].image} />
-                        <div className={clsx(styles.infoWrapper)}>
-                            <span className={clsx(styles.title)}>NewJeans 2nd EP ‘Get Up’</span>
-                            <span className={clsx(styles.artist)}>Newjeans</span>
-                            <span className={clsx(styles.category)}>Category</span>
-                            <Button>
-                                <img src={singlePauseIcon} className={clsx(styles.iconWrapper)}></img>
-                            </Button>
+            <HeaderOnly title={'Playlist'}>
+                 <div className={clsx(styles.wrapper)} >
+
+
+                        <div className={clsx(styles.container, styles.playlistContainer)}>
+                            {playlists&&playlists.map((item, index) => {
+                                return <ItemList
+                                
+                                onClick={()=> handlePlaylistClick(item)}
+                                key={index}
+                                data={item}
+                                index={index + 1}
+                            />
+                            })}
+                            
                         </div>
-                    </div>
-                </div>
-                <div className={clsx(styles.songsWrapper)}>
-                    {songs.map((song, index) => {
-                        return (
-                            <div key={index} className={clsx(styles.songWrapper)}>
-                                <ItemList key={index} option="true" index={index + 1} data={song} />
-                            </div>
-                        );
-                    })}
+                        <div className={clsx(styles.container, styles.songContainer)}>
+
+
+                        {songs&&songs.map((item, index) => {
+                                return <ItemList
+                                small="true"
+                                key={index}
+                                data={item}
+                                index={index + 1}
+                            />
+                            })}
+                        </div>
                 </div>
             </HeaderOnly>
         </div>

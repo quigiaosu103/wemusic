@@ -54,3 +54,21 @@
     margin-bottom: 8px;
     height: 18px;
 }
+
+.toastWrapper {
+    position: fixed;
+    right:40px;
+    bottom: 160px;
+    padding: 12px 24px;
+    text-align:left;
+    width: 300px;
+    border-radius: 8px;
+}
+
+.success {
+    background-color: rgb(74, 249, 68);
+}
+
+.fail {
+    background-color: rgb(249, 68, 68);
+}

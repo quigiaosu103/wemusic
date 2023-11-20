@@ -14,4 +14,6 @@
     justify-content: center;
     padding: 24px;
     border-radius: 8px;
+    width: 16.6%;
+    height: fit-content;
 }

@@ -90,6 +90,7 @@ function Heading() {
                             showOption && (
                                 <div className={clsx(styles.menuWrapper, 'box')} tabIndex="-1" {...attrs}>
                                     <Popper left="true">
+                                        
                                         <Menu data={data} largest="true" />
                                     </Popper>
                                 </div>

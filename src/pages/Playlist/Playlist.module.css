@@ -1,61 +1,16 @@
 .wrapper {
-    margin-top: 40px;
-}
-
-.playlistInfo {
     display: flex;
-    align-items: center;
+}
+.container {
+    width: 50%;
+    padding: 24px 40px;
 }
 
-.infoWrapper {
-    margin-left: 32px;
-    height: 180px;
+.playlistContainer {
+    background: rgba(80, 80, 80, 0.20);
 }
 
-.iconWrapper {
-    display: flex;
-    height: 72px;
-    padding: 21px 19px 21px 23px;
-    justify-content: flex-end;
-    align-items: center;
-    flex-shrink: 0;
-    border-radius: 46px;
-    background: #f0fb54;
-}
+.songContainer {
+    background: rgba(26, 26, 26, 0.20);
 
-.title {
-    font-size: 26px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    display: block;
-    padding: 0px 4px 4px 4px;
-}
-
-.artist {
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    padding: 4px;
-    display: block;
-}
-
-.category {
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    display: block;
-    margin-bottom: 20px;
-}
-
-.songsWrapper {
-    margin-top: 24px;
-}
-
-.img {
-    width: 180px;
-    height: 180px;
-    border-radius: 8px;
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import axios from 'axios';
 import { Route, Routes } from 'react-router-dom';
 import Heading from './layoout/components/Heading';
@@ -7,12 +7,11 @@ import { publicRoutes } from './route';
 import Favorite from './pages/Favorite';
 import Layer from './layoout/components/Layer';
 import SquarePaner from '~/images/SquarePaner.png';
-import { consolelog } from './log';
+import { DataSetContext } from './provider/DatasetProvider';
 function App() {
-    consolelog()
     const [song, setSong] = useState();
     const [listSong, setListSong] = useState([]);
-    const [showDashboard, setShowDashBoard] = useState(false);
+    const {showDashboard, setShowDashBoard} = useContext(DataSetContext).showDashboard;
     return (
         <div className="App">
             <Routes>
@@ -23,11 +22,6 @@ function App() {
                             path={route.path}
                             element={
                                 <route.component
-                                    hooks={{
-                                        song: { song, setSong },
-                                        show: { showDashboard, setShowDashBoard },
-                                        listSong: { listSong, setListSong },
-                                    }}
                                 />
                             }
                         />
@@ -37,7 +31,6 @@ function App() {
             {showDashboard && (
                 <Layer
                     data={{ image: SquarePaner, title: 'Newjeans', subtitle: 'newjeans' }}
-                    hooks={{ song, setSong, listSong }}
                 />
             )}
         </div>

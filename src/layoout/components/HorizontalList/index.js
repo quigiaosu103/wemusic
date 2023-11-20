@@ -6,19 +6,19 @@ import styles from './HorizontalList.module.css';
 import Button from '~/components/Button';
 function HorizontalList({ children, title, onClick, ...props }) {
     const [hidden, setHidden] = useState(false);
-    const preventDefault = (ev) => {
+    const preventDefault = useRef((ev) => {
         if (ev.preventDefault) {
             ev.preventDefault();
         }
         ev.returnValue = false;
-    };
+    });
     const enableBodyScroll = () => {
-        document && document.removeEventListener('wheel', preventDefault, false);
+        document && document.removeEventListener('wheel', preventDefault.current, false);
     };
     const disableBodyScroll = () => {
         console.log('disable');
         document &&
-            document.addEventListener('wheel', preventDefault, {
+            document.addEventListener('wheel', preventDefault.current, {
                 passive: false,
             });
     };
@@ -63,23 +63,24 @@ function HorizontalList({ children, title, onClick, ...props }) {
 
     return (
         <div
+            className={clsx(styles.wrapper)}
             onMouseLeave={() => {
                 enableBodyScroll();
             }}
             onMouseEnter={() => {
                 !props.disablescrolll == true && disableBodyScroll();
             }}
-            className={clsx(styles.wrapper)}
         >
             <div className={clsx(styles.headingWrapper)}>
                 <span className={clsx(styles.title)}>{title}</span>
                 {!props.disablebtn && (
-                    <Button onClick={onClick} disablehover={'true'}>
+                    <Button  onClick={onClick} disablehover={'true'} to={'/empty'}>
                         <span className={clsx(styles.btn)}>Show all</span>
                     </Button>
                 )}
             </div>
             <ScrollMenu
+               
                 onInit={props.auto ? handleSetInterval : () => {}}
                 onWheel={onWheel}
                 className={clsx(styles.listWrapper)}

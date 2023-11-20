@@ -10,12 +10,16 @@ import Button from '~/components/Button';
 import ItemList from '~/components/ItemList';
 import { getAlbums } from '~/api/album/albumsAPI';
 import { getArtists } from '~/api/artist/artistsAPI';
-import { getTopSongs } from '~/api/song/topSong';
-import { useEffect, useState } from 'react';
+import { getTopSongs } from '~/api/song';
+import { DataSetContext } from '~/provider/DatasetProvider';
+import { useContext, useEffect, useState } from 'react';
 function Home({ hooks }) {
     const [albums, setAlbums] = useState([])
     const [artists, setArtists] = useState([])
     const [songs, setSongs] = useState([])
+    const context = useContext(DataSetContext)
+
+    const [emptyObjectType, setEmptyObjectType] = useContext(DataSetContext).objData
     useEffect(() => {
         requestAlbum()
         requestArtist()
@@ -38,76 +42,58 @@ function Home({ hooks }) {
     const requestSongs = async function() {
         getTopSongs()
         .then(res=> {
-            console.log(res)
             setSongs(res)
         })
     }
 
 
 
+
     
 
-    var listData = [
-        {
-            song: "Song's name",
-            image: SquarePaner,
-            artist: 'Artist',
-        },
-        {
-            song: "Song's name",
-            image: SquarePaner,
-            artist: 'Artist',
-        },
-        {
-            song: "Song's name",
-            image: SquarePaner,
-            artist: 'Artist',
-        },
-        {
-            song: "Song's name",
-            image: SquarePaner,
-            artist: 'Artist',
-        },
-    ];
-
+     
     const tags = ['Bossa Nova', 'UK Garage', 'Classical', 'Jazz', 'Afo Beat', 'Jersey Club', 'Pop', 'Country'];
     const colors = ['#9F7CCB', '#5D5ADA', '#BE586C', '#DFBD58', '#D05959', '#2F2F2F', '#B43434', '#4AA14D8A'];
     function handleChooseSong(song) {
-        hooks.song.setSong(song);
-        hooks.listSong.setListSong(songs);
-        hooks.show.setShowDashBoard(true);
+        
+        context.song.setSong(song);
+        context.listSong.setListSong(songs);
+        context.showDashboard.setShowDashBoard(true);
     }
     return (
         <>
             <DefaultLayout newfeed={'true'}>
                 <HorizontalList
                     onClick={() => {
-                        console.log('click');
+                        setEmptyObjectType('Albums')
                     }}
                     title="Popular albums"
                 >
                     {albums.map((item, index) => {
-                        return <RecItem key={index} data={item} />;
+                        return <div key={index} className={clsx(styles.itemWrapper)}>
+                                    <RecItem data={item} />
+                                </div>;
                     })}
                 </HorizontalList>
 
                 <div className={clsx(styles.space)}></div>
                 <HorizontalList
                     onClick={() => {
-                        console.log('click');
+                        setEmptyObjectType('Artists')
                     }}
                     title="Artist"
                 >
                     {artists.map((item, index) => {
                         return (
                             <div key={index} className={clsx(styles.itemWrapper)}>
-                                <CircleItem  data={item} />
+                                <CircleItem s="true"  data={item} />
                             </div>
                         );
                     })}
                 </HorizontalList>
                 <div className={clsx(styles.widgetWrapper)}>
-                    <Widget title={'Genre'}>
+                    <Widget
+                     title={'Genre'}>
                         <div className={styles.flexWidget}>
                             {tags.map((tag, index) => {
                                 return (
@@ -125,7 +111,12 @@ function Home({ hooks }) {
                             })}
                         </div>
                     </Widget>
-                    <Widget title={'Charts'}>
+                    <Widget
+                    onClick={() => {
+                        setEmptyObjectType('Albums')
+                    }}
+                    
+                    title={'Charts'}>
                         <div className={styles.flexWidget}>
                             {songs.map((item, index) => {
                                 return (

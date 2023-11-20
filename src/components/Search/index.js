@@ -4,31 +4,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Menu from '../Menu';
 import Button from '../Button';
 import Popper from '../Popper';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Search.module.css';
 import SearchIcon from '~/images/SearchIcon.svg';
+import useDebounce from '~/layoout/components/hooks/useDebounce';
+import { getSearchResult } from '~/api/search';
 
-var data = [
-    {
-        text: 'Search',
-    },
-    {
-        icon: SearchIcon,
-        text: 'Search',
-        to: '/favorite',
-    },
-    {
-        icon: SearchIcon,
-        text: 'Setting',
-        click: () => {
-            alert('clicked');
-        },
-    },
-];
+
 function Search() {
-    const [listResult, setListResult] = useState([1]);
     const [showResult, setShowResult] = useState(false);
-    const [input, setInput] = useState('');
+    const [searchResult, setSearchResult] = useState()
+    const [searchValue, setSearchValue] = useState('');
+    const debounceValue = useDebounce(searchValue, 500);
     function handleShow() {
         console.log('call');
         if (!showResult) {
@@ -40,17 +27,34 @@ function Search() {
         setShowResult(false);
     }
 
+    const handleChange = (e) => {
+        const inputValue = e.target.value;
+        console.log(inputValue)
+        if (!inputValue.startsWith(' ')) {
+          setSearchValue(inputValue);
+        }
+      };
+
+    useEffect(() => {
+        if (!debounceValue) {
+          setSearchResult([]);
+          return;
+        }
+        getSearchResult(debounceValue).then(res => {
+            setSearchResult(res)})
+        
+      }, [debounceValue]);
     return (
         <Tippy
             visible={true}
             interactive={'true'}
             onClickOutside={handleHide}
             render={(attrs) =>
-                listResult.length &&
+                searchResult&&(searchResult.songs||searchResult.albums||searchResult.artists) &&
                 showResult && (
                     <div className={clsx(styles.menuWrapper, 'box')} tabIndex="-1" {...attrs}>
                         <Popper center="true">
-                            <Menu data={data} largest={'true'} />
+                            <Menu multitask="true" data={searchResult} largest={'true'} />
                         </Popper>
                     </div>
                 )
@@ -63,10 +67,8 @@ function Search() {
                     </Button>
                 </span>
                 <input
-                    onChange={(e) => {
-                        setInput(e.target.value);
-                    }}
-                    value={input}
+                    onChange={handleChange}
+                    value={searchValue}
                     onFocus={handleShow}
                     placeholder="Search by artist, song and album"
                     className={clsx(styles.inputField)}

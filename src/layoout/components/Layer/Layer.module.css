@@ -142,3 +142,7 @@
 .smallBar[type='range']::-webkit-slider-thumb {
     background: #fff;
 }
+
+.stableWidth {
+    width: 240px
+}
