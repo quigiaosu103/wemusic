@@ -12,7 +12,9 @@ instant.interceptors.response.use(
     err => {
         if(err.response.data == 'username is existed!') {
             return 'userExisted'
+        }if(err.response.data == 'user not found'){
+            return 'invalidAuthenInfo'
         }
-        console.log(err)
+        return err.response.data
     })
 export default instant

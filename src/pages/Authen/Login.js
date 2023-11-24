@@ -1,11 +1,13 @@
 import clsx from 'clsx';
+import CryptoJS from 'crypto-js';
+import { useRef, useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import Authen from '.';
+import { getUser } from '~/api/user';
 import styles from './Login.module.css';
 import Label from '~/images/Label.svg';
 import Button from '~/components/Button';
-import { useRef, useState } from 'react';
 import InputField from '~/components/InputField';
-import { Link, Navigate } from 'react-router-dom';
 function Login() {
     const [logged, setLogged] = useState(false);
     const [errId, setErrId] = useState(-1);
@@ -34,9 +36,20 @@ function Login() {
         } else if (password == '') {
             setErrId(1);
         } else {
-            // refBtn.current.click();
-            setLogged(true);
+            getUser(username, hashStringSHA1(password))
+            .then(res => {
+                if(res === 'invalidAuthenInfo') {
+                    setErrLogin("Username or password is invalid")
+                    console.log('err    ')
+                }else {
+                    setLogged(true);
+                }
+            })
         }
+    }
+    function hashStringSHA1(message) {
+        const hash = CryptoJS.SHA1(message).toString(CryptoJS.enc.Hex);
+        return hash;
     }
     return (
         <Authen>
@@ -57,7 +70,7 @@ function Login() {
                         />
                     );
                 })}
-                <span className={clsx(styles.errLabel)}></span>
+                <span className={clsx(styles.errLabel)}>{errLogin}</span>
                 <div className={clsx(styles.btnsWrapper)}>
                     <Button to="/signup" back="#252525">
                         <span className={clsx(styles.btnInner)}>Siggn up</span>
