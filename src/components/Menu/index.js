@@ -49,6 +49,7 @@ function Menu(props) {
             }))
         }
     }, [props.data])
+    console.log(props.data)
 
     return (
         <div className={clsx(styles.wrapper)}>
@@ -69,6 +70,7 @@ function Menu(props) {
                 }):""}
             </>
             :props.data.map((data, index) => (
+                
                 <MenuItem onClick={()=>{}} key={index} {...props} value={data} />
             ))}
         </div>

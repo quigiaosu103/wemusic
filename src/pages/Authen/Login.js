@@ -42,6 +42,10 @@ function Login() {
                     setErrLogin("Username or password is invalid")
                     console.log('err    ')
                 }else {
+
+                    localStorage.setItem('token', res.jwt)
+                    localStorage.setItem('user', JSON.stringify(res.user))
+                    console.log( res.jwt)
                     setLogged(true);
                 }
             })

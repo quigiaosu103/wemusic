@@ -8,5 +8,8 @@
 }
 
 .itemWrapper {
-    margin-top: 40px;
+    margin: 40px;
+    width: 180px;
+    height: 180px;
+
 }

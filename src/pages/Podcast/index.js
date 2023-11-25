@@ -4,6 +4,8 @@ import HeaderOnly from '~/layoout/HeaderOnly';
 import styles from './Podcast.module.css';
 import RecItem from '~/components/RecItem/indedx';
 import SquarePaner from '~/images/SquarePaner.png';
+import { useEffect, useState } from 'react';
+import { getPodcast } from '~/api/podcast';
 var data = [
     {
         name: 'Artist',
@@ -62,6 +64,15 @@ var data = [
     },
 ];
 function Podcast() {
+    const [data, setData] = useState([])
+
+    useEffect(()=> {
+        getPodcast()
+        .then((res) => {
+            console.log(res)
+            setData(res)
+          })
+    }, [])
     return (
         <div>
             <HeaderOnly title={'Podcast'}>

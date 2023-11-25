@@ -7,6 +7,7 @@ import Login from '~/pages/Authen/Login';
 import Signup from '~/pages/Authen/Signup';
 import Empty from '~/pages/Empty';
 import Collection from '~/pages/Collection';
+import Admin from '~/pages/Admin';
 const publicRoutes = [
     { path: config.routes.home, component: Home },
     { path: config.routes.playlist, component: Playlist },
@@ -16,6 +17,7 @@ const publicRoutes = [
     { path: config.routes.signup, component: Signup },
     { path: config.routes.empty, component: Empty },
     { path: config.routes.collection, component: Collection },
+    { path: config.routes.admin, component: Admin },
 ];
 
 export { publicRoutes };

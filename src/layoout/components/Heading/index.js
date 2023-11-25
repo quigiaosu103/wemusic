@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Tippy from '@tippyjs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Heading.module.css';
 import Button from '../../../components/Button';
 import Profile from '~/images/Profile.svg';
@@ -9,22 +9,8 @@ import Menu from '~/components/Menu';
 import whiteUser from '~/images/whiteUSer.svg';
 import Setting from '~/images/Setting.svg';
 import Popper from '~/components/Popper';
-const data = [
-    {
-        icon: whiteUser,
-        text: 'Profile',
-        to: '',
-    },
-    {
-        icon: Setting,
-        text: 'Setting',
-    },
-    {
-        icon: whiteUser,
-        iconFill: 'invert(70%) sepia(96%) saturate(2456%) hue-rotate(315deg) brightness(103%) contrast(99%)',
-        text: 'Log out',
-    },
-];
+import { useNavigate } from 'react-router-dom';
+
 
 const btns = [
     {
@@ -44,7 +30,47 @@ const btns = [
 function Heading() {
     const [showOption, setShowOption] = useState(false);
     const [activeBtn, setActiveBtn] = useState(-1);
-    const [user, setUser] = useState('LongNguyen');
+    const nav = useNavigate()
+    const [data, setData] = useState([
+        {
+            icon: whiteUser,
+            text: 'Profile',
+            to: '',
+        },
+        {
+            icon: Setting,
+            text: 'Setting',
+        },
+        {
+            icon: whiteUser,
+            iconFill: 'invert(70%) sepia(96%) saturate(2456%) hue-rotate(315deg) brightness(103%) contrast(99%)',
+            text: 'Log out',
+            click: () =>{localStorage.removeItem('user')
+           window.location.reload();
+        
+        }
+        },
+    ]);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+
+    useEffect(()=> {
+        if(user && user.userName == 'Admin') {
+            console.log(user.userName);
+            setData(prev => {
+                prev.unshift({
+                    icon: whiteUser,
+                    iconFill: 'invert(70%) sepia(96%) saturate(2456%) hue-rotate(315deg) brightness(103%) contrast(99%)',
+                    text: 'Administrator',
+                    click: ()=> {
+                        nav('/admin')
+
+                    }
+                })
+
+                return prev
+            })
+        }
+    }, [])
     function handleHide() {
         setShowOption(false);
     }
@@ -81,7 +107,7 @@ function Heading() {
                     </span>
                 ))}
 
-                {user != '' ? (
+                {user ||'' ? (
                     <Tippy
                         visible={true}
                         interactive={'true'}
@@ -99,7 +125,7 @@ function Heading() {
                     >
                         <span>
                             <Button onMouseEnter={handleShow} largest={'true'}>
-                                {user}
+                                {user.name}
                                 <span className={clsx(styles.iconWrapper)}>
                                     <img src={Profile} className={clsx(styles.userIcon)}></img>
                                 </span>
@@ -108,7 +134,7 @@ function Heading() {
                     </Tippy>
                 ) : (
                     <Button disablehover to="/login" largest={'true'}>
-                        Login
+                        {user?user.name: 'Login'}
                         <span className={clsx(styles.iconWrapper)}>
                             <img src={Profile} className={clsx(styles.userIcon)}></img>
                         </span>

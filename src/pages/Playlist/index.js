@@ -23,7 +23,7 @@ function Playlist() {
     const nav = useNavigate()
 
     useEffect(()=> {
-        if(!localStorage.getItem('authen')) {
+        if(!localStorage.getItem('user')) {
            nav('/login')
         }
 
@@ -49,7 +49,7 @@ function Playlist() {
 
     
     const getSong = async function() {
-        await getUserPlaylist(localStorage.getItem('authen'))
+        await getUserPlaylist(JSON.parse(localStorage.getItem('user')).userName)
         .then(res => setPlaylists(res))
     }
 

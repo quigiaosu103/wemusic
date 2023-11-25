@@ -7,6 +7,7 @@ const routes = {
     signup: '/signup',
     empty: '/empty',
     collection: '/collection',
+    admin: '/admin',
 };
 
 export default routes;
